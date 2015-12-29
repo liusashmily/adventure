@@ -92,6 +92,9 @@ WebVRConfig = {
 var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setPixelRatio(window.devicePixelRatio);
 
+// Define global material for all the images in the story
+var currentImgIndex = 0;
+
 // Append the canvas element created by the renderer to document body element.
 document.body.appendChild(renderer.domElement);
 
@@ -110,11 +113,11 @@ effect.setSize(window.innerWidth, window.innerHeight);
 
 // Add the image as the skybox
 var loader = new THREE.TextureLoader();
-loader.load('img/airplane.JPG', onTextureLoaded);
+loader.load('img/welcome.JPG', onTextureLoaded);
 
 function onTextureLoaded(texture) {
 
-  var geometry =  new THREE.SphereGeometry(0, 0, 0);
+  var geometry =  new THREE.SphereGeometry(50, 0, 0);
   var material = new THREE.MeshBasicMaterial({
     map: texture,
     //color: 0x01BE00,
@@ -133,9 +136,9 @@ var params = {
 var manager = new WebVRManager(renderer, effect, params);
 
 // Create 3D objects.
-var geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-var material = new THREE.MeshNormalMaterial();
-var cube = new THREE.Mesh(geometry, material);
+//var geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+//var material = new THREE.MeshNormalMaterial();
+//var cube = new THREE.Mesh(geometry, material);
 
 // Position cube mesh
 cube.position.z = -1;
@@ -168,6 +171,73 @@ function onKey(event) {
     controls.resetSensor();
   }
 }
+
+function onDocumentMouseUp(event) {
+  event.preventDefault();
+  currentImgIndex++;
+  switch(currentImgIndex) {
+    case 0:
+        //console.log("currentImgIndex: ", currentImgIndex);
+        loader.load('img/welcome.JPG', onTextureLoaded);
+        break;
+    case 1:
+        loader.load('img/airplane.JPG', onTextureLoaded);
+        break;
+    case 2:
+        loader.load('img/arrive.JPG', onTextureLoaded);
+        break;
+    case 3:
+        loader.load('img/family.JPG', onTextureLoaded);
+        break;    
+    case 4:
+        loader.load('img/dining.JPG', onTextureLoaded);
+        break;    
+    case 5:
+        loader.load('img/friends.JPG', onTextureLoaded);
+        break;
+    case 6:
+        loader.load('img/wedding.JPG', onTextureLoaded);
+        break;
+    default:
+        loader.load('img/welcome.JPG', onTextureLoaded);
+  } 
+}
+
+function onDocumentTouchEnd(event) {
+  event.preventDefault();
+  currentImgIndex++; 
+  switch(currentImgIndex) {
+    case 0:
+        //console.log("currentImgIndex: ", currentImgIndex);
+        loader.load('img/welcome.JPG', onTextureLoaded);
+        break;
+    case 1:
+        loader.load('img/airplane.JPG', onTextureLoaded);
+        break;
+    case 2:
+        loader.load('img/arrive.JPG', onTextureLoaded);
+        break;
+    case 3:
+        loader.load('img/family.JPG', onTextureLoaded);
+        break;    
+    case 4:
+        loader.load('img/dining.JPG', onTextureLoaded);
+        break;    
+    case 5:
+        loader.load('img/friends.JPG', onTextureLoaded);
+        break;
+    case 6:
+        loader.load('img/wedding.JPG', onTextureLoaded);
+        break;
+    default:
+        loader.load('img/welcome.JPG', onTextureLoaded);
+  } 
+}
+
+if (!manager.isVRCompatible) {
+renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false);
+} 
+renderer.domElement.addEventListener( 'touchend', onDocumentTouchEnd, false);
 
 window.addEventListener('keydown', onKey, true);
 
