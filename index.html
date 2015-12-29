@@ -2,23 +2,12 @@
 
 <html lang="en">
 <head>
-<title>Web VR boilerplate</title>
+<title>Adventure</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<style>
-body {
-  width: 100%;
-  height: 100%;
-  background-color: #000;
-  color: #fff;
-  margin: 0px;
-  padding: 0;
-  overflow: hidden;
-}
-</style>
 </head>
 
 <body>
@@ -136,15 +125,15 @@ var params = {
 var manager = new WebVRManager(renderer, effect, params);
 
 // Create 3D objects.
-//var geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-//var material = new THREE.MeshNormalMaterial();
-//var cube = new THREE.Mesh(geometry, material);
+var geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+var material = new THREE.MeshNormalMaterial();
+var cube = new THREE.Mesh(geometry, material);
 
 // Position cube mesh
 cube.position.z = -1;
 
 // Add cube mesh to your three.js scene
-scene.add(cube);
+//scene.add(cube);
 // Request animation frame loop function
 function animate(timestamp) {
   // Apply rotation to cube mesh
@@ -198,6 +187,10 @@ function onDocumentMouseUp(event) {
     case 6:
         loader.load('img/wedding.JPG', onTextureLoaded);
         break;
+    case 7:
+        currentImgIndex = 0;
+        loader.load('img/welcome.JPG', onTextureLoaded);
+        break;
     default:
         loader.load('img/welcome.JPG', onTextureLoaded);
   } 
@@ -228,6 +221,10 @@ function onDocumentTouchEnd(event) {
         break;
     case 6:
         loader.load('img/wedding.JPG', onTextureLoaded);
+        break;
+    case 7:
+        currentImgIndex = 0;
+        loader.load('img/welcome.JPG', onTextureLoaded);
         break;
     default:
         loader.load('img/welcome.JPG', onTextureLoaded);
