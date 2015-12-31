@@ -144,7 +144,8 @@ var material = new THREE.MeshNormalMaterial();
 var cube = new THREE.Mesh(geometry, material);
 // Position cube mesh
 cube.position.z = -1;
-scene.add(cube);
+//scene.add(cube);
+displayCurrentStory(stories[0]);
 
 function displayCurrentStory(name) {
   scene.remove(currentStoryTextMesh);
@@ -155,13 +156,17 @@ function displayCurrentStory(name) {
     curveSegments: 12,
     font: "helvetiker"
   });
-  currentStoryTextMesh = new THREE.Mesh(currentStoryText, new THREE.MeshBasicMaterial({color: 0xFF00FF}
+  //currentStoryTextMesh = new THREE.Mesh(currentStoryText, new THREE.MeshBasicMaterial({color: 0xFF00FF}
+    currentStoryTextMesh = new THREE.Mesh(currentStoryText, new THREE.MeshLambertMaterial({color: 0xFF00FF}
   ));
-
+  currentStoryText.computeBoundingBox();
+  var centerOffset = -0.5 * ( currentStoryText.boundingBox.max.x - currentStoryText.boundingBox.min.x );
+  
+  currentStoryTextMesh.position.x = centerOffset;
   currentStoryTextMesh.position.y = 0.2;
   currentStoryTextMesh.position.z = -1;
   currentStoryTextMesh.rotation.x = 0.0;
-  currentStoryTextMesh.rotation.y = -180;
+  currentStoryTextMesh.rotation.y = 0;
   scene.add(currentStoryTextMesh);
 }
 
@@ -233,31 +238,40 @@ function onDocumentTouchEnd(event) {
     case 0:
         //console.log("currentImgIndex: ", currentImgIndex);
         loader.load('img/welcome.JPG', onTextureLoaded);
+        displayCurrentStory(stories[0]);
         break;
     case 1:
         loader.load('img/airplane.JPG', onTextureLoaded);
+        displayCurrentStory(stories[1]);        
         break;
     case 2:
         loader.load('img/arrive.JPG', onTextureLoaded);
+        displayCurrentStory(stories[2]);
         break;
     case 3:
         loader.load('img/family.JPG', onTextureLoaded);
+        displayCurrentStory(stories[3]);
         break;    
     case 4:
         loader.load('img/dining.JPG', onTextureLoaded);
+        displayCurrentStory(stories[4]);
         break;    
     case 5:
         loader.load('img/friends.JPG', onTextureLoaded);
+        displayCurrentStory(stories[5]);
         break;
     case 6:
         loader.load('img/wedding.JPG', onTextureLoaded);
+        displayCurrentStory(stories[6]);
         break;
     case 7:
         currentImgIndex = 0;
         loader.load('img/welcome.JPG', onTextureLoaded);
+        displayCurrentStory(stories[7]);
         break;
     default:
         loader.load('img/welcome.JPG', onTextureLoaded);
+        displayCurrentStory(stories[0]);
   } 
 }
 if (!manager.isVRCompatible) {
