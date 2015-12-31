@@ -27,12 +27,44 @@ body {
 <body>
 
 </body>
+<script>
+/*
+ * Debug parameters.
+ */
+WebVRConfig = {
+  /**
+   * webvr-polyfill configuration
+   */
+
+  // Forces availability of VR mode.
+  FORCE_ENABLE_VR: true, // Default: false.
+  // Complementary filter coefficient. 0 for accelerometer, 1 for gyro.
+  //K_FILTER: 0.98, // Default: 0.98.
+  // How far into the future to predict during fast motion.
+  //PREDICTION_TIME_S: 0.040, // Default: 0.040 (in seconds).
+  // Flag to disable touch panner. In case you have your own touch controls
+  //TOUCH_PANNER_DISABLED: true, // Default: false.
+  // Enable yaw panning only, disabling roll and pitch. This can be useful for
+  // panoramas with nothing interesting above or below.
+  //YAW_ONLY: true, // Default: false.
+
+  /**
+   * webvr-boilerplate configuration
+   */
+  // Forces distortion in VR mode.
+  //FORCE_DISTORTION: flase, // Default: false.
+  // Override the distortion background color.
+  //DISTORTION_BGCOLOR: {x: 1, y: 0, z: 0, w: 1}, // Default: (0,0,0,1).
+  // Prevent distortion from happening.
+  //PREVENT_DISTORTION: true, // Default: false.
+};
+</script>
 
 
 <!--
   three.js 3d library
   -->
-<script src="bower_components/threejs/build/three.js"></script>
+<script src="bower_components/threejs/build/three.min.js"></script>
 
 <!--
   VRControls.js acquires positional information from connected VR devices and applies the transformations to a three.js camera object.
@@ -54,12 +86,20 @@ body {
   -->
 <script src="build/webvr-manager.js"></script>
 
+<script src="bower_components/threejs/examples/js/geometries/TextGeometry.js"></script>
+<script src="bower_components/threejs/examples/js/utils/FontUtils.js"></script>
+<script src="fonts/helvetiker_regular.typeface.js"></script>
 
 <script>
 // Setup three.js WebGL renderer. Note: Antialiasing is a big performance hit.
 // Only enable it if you actually need to.
 var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setPixelRatio(window.devicePixelRatio);
+
+var stories = ['Welcome to the China Adventure! Trip Planning', 'Take a flight', 'I arrived!','Meeting family','Family Dinner','Dining out','Sister\'s wedding!','Dining with Friend'];
+var currentStoryText = new THREE.TextGeometry();
+var currentStoryTextMesh = new THREE.Mesh();
+
 // Define global material for all the images in the story
 var currentImgIndex = 0;
 // Append the canvas element created by the renderer to document body element.
@@ -77,7 +117,7 @@ effect.setSize(window.innerWidth, window.innerHeight);
 var loader = new THREE.TextureLoader();
 loader.load('img/welcome.JPG', onTextureLoaded);
 function onTextureLoaded(texture) {
-  var geometry =  new THREE.SphereGeometry(50, 0, 0);
+  var geometry =  new THREE.SphereGeometry(0, 0, 0);
   var material = new THREE.MeshBasicMaterial({
     map: texture,
     //color: 0x01BE00,
@@ -86,6 +126,12 @@ function onTextureLoaded(texture) {
   var skybox = new THREE.Mesh(geometry, material);
   scene.add(skybox);
 }
+
+var light = new THREE.PointLight(0xffffff, 1, 1000);
+light.position.set(0, 0, 0);
+scene.add(light);
+
+
 // Create a VR manager helper to enter and exit VR mode.
 var params = {
   hideButton: false, // Default: false.
@@ -95,6 +141,28 @@ var manager = new WebVRManager(renderer, effect, params);
 // Create 3D objects.
 var geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 var material = new THREE.MeshNormalMaterial();
+var cube = new THREE.Mesh(geometry, material);
+// Position cube mesh
+cube.position.z = -1;
+scene.add(cube);
+
+function displayCurrentStory(name) {
+  scene.remove(currentStoryTextMesh);
+  console.log("currentStoryText:",name);
+  currentStoryText = new THREE.TextGeometry(name, {
+    size: .25,
+    height: .05,
+    curveSegments: 12,
+    font: "helvetiker"
+  });
+  currentStoryTextMesh = new THREE.Mesh(currentStoryText, new THREE.MeshBasicMaterial({color: 0xFF00FF}
+  ));
+  currentStoryTextMesh.position.y = 0.2;
+  currentStoryTextMesh.position.z = -1;
+  currentStoryTextMesh.rotation.x = 0.0;
+  //currentStoryTextMesh.rotation.y = -180;
+  scene.add(currentStoryTextMesh);
+}
 
 // Request animation frame loop function
 function animate(timestamp) {
@@ -121,30 +189,39 @@ function onDocumentMouseUp(event) {
     case 0:
         //console.log("currentImgIndex: ", currentImgIndex);
         loader.load('img/welcome.JPG', onTextureLoaded);
+        displayCurrentStory(stories[0]);
         break;
     case 1:
         loader.load('img/airplane.JPG', onTextureLoaded);
+        displayCurrentStory(stories[1]);
         break;
     case 2:
         loader.load('img/arrive.JPG', onTextureLoaded);
+        displayCurrentStory(stories[2]);
         break;
     case 3:
         loader.load('img/family.JPG', onTextureLoaded);
+        displayCurrentStory(stories[3]);
         break;    
     case 4:
         loader.load('img/dining.JPG', onTextureLoaded);
+        displayCurrentStory(stories[4]);
         break;    
     case 5:
         loader.load('img/friends.JPG', onTextureLoaded);
+        displayCurrentStory(stories[5]);
         break;
     case 6:
         loader.load('img/wedding.JPG', onTextureLoaded);
+        displayCurrentStory(stories[6]);
         break;
     case 7:
         currentImgIndex = 0;
+        displayCurrentStory(stories[7]);
         loader.load('img/welcome.JPG', onTextureLoaded);
         break;
     default:
+        displayCurrentStory(stories[0]);
         loader.load('img/welcome.JPG', onTextureLoaded);
   } 
 }
