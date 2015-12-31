@@ -157,10 +157,11 @@ function displayCurrentStory(name) {
   });
   currentStoryTextMesh = new THREE.Mesh(currentStoryText, new THREE.MeshBasicMaterial({color: 0xFF00FF}
   ));
+
   currentStoryTextMesh.position.y = 0.2;
   currentStoryTextMesh.position.z = -1;
   currentStoryTextMesh.rotation.x = 0.0;
-  //currentStoryTextMesh.rotation.y = -180;
+  currentStoryTextMesh.rotation.y = -180;
   scene.add(currentStoryTextMesh);
 }
 
