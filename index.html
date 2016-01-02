@@ -37,7 +37,7 @@ WebVRConfig = {
    */
 
   // Forces availability of VR mode.
-  FORCE_ENABLE_VR: true, // Default: false.
+ // FORCE_ENABLE_VR: true, // Default: false.
   // Complementary filter coefficient. 0 for accelerometer, 1 for gyro.
   //K_FILTER: 0.98, // Default: 0.98.
   // How far into the future to predict during fast motion.
@@ -96,7 +96,7 @@ WebVRConfig = {
 var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setPixelRatio(window.devicePixelRatio);
 
-var stories = ['Welcome to the China Adventure! Trip Planning', 'Take a flight', 'I arrived!','Meeting family','Family Dinner','Dining out','Sister\'s wedding!','Dining with Friend'];
+var stories = ['Trip Planning', 'Take a flight - Air China', 'Arrive - Meeting family','Play Mah Jongg','Family Dinner','Hot Pot with Friends','Sister\'s wedding!'];
 var currentStoryText = new THREE.TextGeometry();
 var currentStoryTextMesh = new THREE.Mesh();
 
@@ -117,7 +117,7 @@ effect.setSize(window.innerWidth, window.innerHeight);
 var loader = new THREE.TextureLoader();
 loader.load('img/welcome.JPG', onTextureLoaded);
 function onTextureLoaded(texture) {
-  var geometry =  new THREE.SphereGeometry(0, 0, 0);
+  var geometry =  new THREE.SphereGeometry(100, 32, 32);
   var material = new THREE.MeshBasicMaterial({
     map: texture,
     //color: 0x01BE00,
@@ -151,7 +151,7 @@ function displayCurrentStory(name) {
   scene.remove(currentStoryTextMesh);
   console.log("currentStoryText:",name);
   currentStoryText = new THREE.TextGeometry(name, {
-    size: .25,
+    size: .10,
     height: .05,
     curveSegments: 12,
     font: "helvetiker"
@@ -163,8 +163,8 @@ function displayCurrentStory(name) {
   var centerOffset = -0.5 * ( currentStoryText.boundingBox.max.x - currentStoryText.boundingBox.min.x );
   
   currentStoryTextMesh.position.x = centerOffset;
-  currentStoryTextMesh.position.y = 0.2;
-  currentStoryTextMesh.position.z = -1;
+  currentStoryTextMesh.position.y = 1;
+  currentStoryTextMesh.position.z = -2;
   currentStoryTextMesh.rotation.x = 0.0;
   currentStoryTextMesh.rotation.y = 0;
   scene.add(currentStoryTextMesh);
@@ -223,7 +223,7 @@ function onDocumentMouseUp(event) {
         break;
     case 7:
         currentImgIndex = 0;
-        displayCurrentStory(stories[7]);
+        displayCurrentStory(stories[0]);
         loader.load('img/welcome.JPG', onTextureLoaded);
         break;
     default:
